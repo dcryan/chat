@@ -51,10 +51,9 @@ try:
         # use input(), but I want shift enter to work
         user_message = input("  ")
 
-        if user_message == "exit":
-            print()
-            print("👋bye")
-            exit()
+        if user_message == "exit" or user_message == "quit":
+            # throw keyboard interrupt to exit
+            raise KeyboardInterrupt
 
         print()
         messages.append({"role": "user", "content": user_message})
@@ -64,17 +63,28 @@ try:
         completion = openai.ChatCompletion.create(
           model="gpt-3.5-turbo",
           messages=messages,
+          stream=True,
         )
 
         spinner.stop()
 
-        assistant_message = completion.choices[0].message.content
-
-        messages.append({"role": "assistant", "content": assistant_message})
+        collectedMessages = []
 
         print("\033[96mAssistant:\033[00m")
-        print("\033[96m  " + assistant_message + "\033[00m")
+        print("  ", end="")
+        for chunk in completion:
+            delta = chunk['choices'][0]['delta']
+            if "content" in delta:
+                content = delta['content']
+                collectedMessages.append(content)
+                print("\033[96m" + content + "\033[00m", end="")
         print()
+        print()
+
+
+        assistant_message = "".join(collectedMessages)
+
+        messages.append({"role": "assistant", "content": assistant_message})
 
 except KeyboardInterrupt:
     print()
