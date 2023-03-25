@@ -20,3 +20,5 @@ Note: The available models are ChatGPT, CodeGPT, TaxGPT, and Custom. The default
 
 Customization
 You can customize the chatbot by modifying the code. For example, you can change the messages that the chatbot sends or add additional models to choose from.
+
+![2023-03-25 10 09 20](https://user-images.githubusercontent.com/4071596/227708227-ceaa6722-5b21-4400-8089-d1fabc9477ff.gif)
