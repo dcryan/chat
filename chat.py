@@ -7,6 +7,31 @@ spinner = Spinner()
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+def get_user_input():
+    print("User:")
+    user_message = input("  ")
+    print()
+
+    if user_message == "exit" or user_message == "quit":
+        raise KeyboardInterrupt
+
+def get_assistant_message(completion):
+    collectedMessages = []
+
+    print("\033[96mAssistant:\033[00m")
+    print("  ", end="")
+    for chunk in completion:
+        delta = chunk['choices'][0]['delta']
+        if "content" in delta:
+            content = delta['content']
+            collectedMessages.append(content)
+            print("\033[96m" + content + "\033[00m", end="")
+    print()
+    print()
+
+
+    return "".join(collectedMessages)
+
 try:
     messages = []
 
@@ -47,13 +72,7 @@ try:
     messages.append({"role": "system", "content": system_message})
 
     while True:
-        print("User:")
-        user_message = input("  ")
-
-        if user_message == "exit" or user_message == "quit":
-            raise KeyboardInterrupt
-
-        print()
+        user_message = get_user_input()
         messages.append({"role": "user", "content": user_message})
 
         spinner.start()
@@ -66,21 +85,7 @@ try:
 
         spinner.stop()
 
-        collectedMessages = []
-
-        print("\033[96mAssistant:\033[00m")
-        print("  ", end="")
-        for chunk in completion:
-            delta = chunk['choices'][0]['delta']
-            if "content" in delta:
-                content = delta['content']
-                collectedMessages.append(content)
-                print("\033[96m" + content + "\033[00m", end="")
-        print()
-        print()
-
-
-        assistant_message = "".join(collectedMessages)
+        assistant_message = get_assistant_message(completion)
 
         messages.append({"role": "assistant", "content": assistant_message})
 
