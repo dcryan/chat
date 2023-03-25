@@ -30,7 +30,7 @@ try:
 
     system_message = ""
 
-    # green color
+    print()
     print("\033[92mSystem:\033[00m")
     if model == "1":
         system_message = "Hi, I'm CodeGPT. I'm a code completion model. I can help you write code. Let's get started."
@@ -48,11 +48,9 @@ try:
 
     while True:
         print("User:")
-        # use input(), but I want shift enter to work
         user_message = input("  ")
 
         if user_message == "exit" or user_message == "quit":
-            # throw keyboard interrupt to exit
             raise KeyboardInterrupt
 
         print()
