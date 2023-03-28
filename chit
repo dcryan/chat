@@ -5,6 +5,9 @@ import openai
 import tiktoken
 from spinner import Spinner
 
+from prompt_toolkit import prompt
+
+
 encoding = tiktoken.get_encoding("cl100k_base")
 spinner = Spinner()
 
@@ -31,7 +34,7 @@ def get_model():
     print("2. TaxGPT")
     print("3. Custom")
     print()
-    model = input()
+    model = input('> ')
 
     # delete the user's input and the previous print statements
     print("\033[A                             \033[A")
@@ -54,7 +57,7 @@ def get_system_message(model):
     elif model == "2":
         system_message = "Hi, I'm TaxGPT. I'm a tax form completion model. I can help you fill out your tax forms. Let's get started."
     elif model == "3":
-        system_message = input("  ")
+        system_message = prompt('> ', vi_mode=True, multiline=True)
     else:
         system_message = "Hi, I'm ChatGPT. I'm a chat completion model. I can help you write messages. Let's get started."
 
@@ -65,8 +68,8 @@ def get_system_message(model):
 
 
 def get_user_input():
-    print("User:")
-    user_message = input("  ")
+    print("User: \033[90m(ESCAPE + ENTER to send)\033[00m")
+    user_message = prompt('> ', vi_mode=True, multiline=True)
     print()
 
     if user_message == "exit" or user_message == "quit":
